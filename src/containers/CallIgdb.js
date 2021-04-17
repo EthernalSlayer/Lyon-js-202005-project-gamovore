@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-let API_KEY = '';
+let API_KEY = localStorage.getItem('API_KEY');
+const CLIENT_ID = process.env.REACT_APP_API_CLIENT_ID;
 
 const CallIgdb = (dataCallIgdb) => {
 	const [gameList, setGameList] = useState([]);
@@ -9,23 +10,25 @@ const CallIgdb = (dataCallIgdb) => {
 
 	useEffect(() => {
 		console.log(API_KEY);
-		axios
-			.post(
-				`https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_API_CLIENT_ID}&client_secret=${process.env.REACT_APP_API_SECRET}&grant_type=client_credentials`
-			)
-			.then((response) => response.data)
-			.then((data) => (API_KEY = data.access_token))
-			.catch((err) => console.log(err));
-		if (API_KEY.length) {
+		console.log(CLIENT_ID);
+		if (!API_KEY)
+			axios
+				.post(
+					`https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_API_CLIENT_ID}&client_secret=${process.env.REACT_APP_API_SECRET}&grant_type=client_credentials`
+				)
+				.then((response) => response.data)
+				.then((data) => localStorage.setItem('API_KEY', data.access_token))
+				.catch((err) => console.log(err));
+		if (API_KEY) {
 			axios({
-				url: 'https://api.igdb.com/v4/games',
+				url:
+					'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games',
 				method: 'POST',
 				headers: {
-					Accept: 'application/json',
-					Client_ID: process.env.REACT_APP_API_CLIENT_ID,
+					'Client-ID': process.env.REACT_APP_API_CLIENT_ID,
 					Authorization: `Bearer ${API_KEY}`,
 				},
-				// data: dataCallIgdb,
+				data: dataCallIgdb,
 			})
 				.then((response) => response.data)
 				.then((data) => {

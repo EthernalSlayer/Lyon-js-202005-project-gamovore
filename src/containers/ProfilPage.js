@@ -18,7 +18,7 @@ import Button from '../style/Button';
 import MyGameDiv from '../style/MyGameDiv';
 import Section from '../style/Section';
 
-const API_KEY = process.env.REACT_APP_API_KEY;
+let API_KEY = localStorage.getItem('API_KEY');
 
 const ProfilPage = () => {
 	const { user, setUser } = useContext(UserContext);
@@ -41,8 +41,8 @@ const ProfilPage = () => {
 					'https://cors-anywhere.herokuapp.com/https://api.igdb.com/v4/games',
 				method: 'POST',
 				headers: {
-					Accept: 'application/json',
-					'user-key': API_KEY,
+					'Client-ID': process.env.REACT_APP_API_CLIENT_ID,
+					Authorization: `Bearer ${API_KEY}`,
 				},
 				data: dataCallIgdb,
 			})
