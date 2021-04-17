@@ -40,7 +40,7 @@ const CallIgdb = (dataCallIgdb) => {
 					setLoading(false);
 				});
 		}
-	}, [dataCallIgdb, API_KEY]);
+	}, [dataCallIgdb]);
 
 	return { gameList, setGameList, loading, setLoading };
 };
