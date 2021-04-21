@@ -9,8 +9,6 @@ const CallIgdb = (dataCallIgdb) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		console.log(API_KEY);
-		console.log(CLIENT_ID);
 		if (!API_KEY)
 			axios
 				.post(
